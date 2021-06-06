@@ -34,7 +34,7 @@ public class InformationCollector {
         Selenide.$$x("//div[2]//details").stream()
                 .map(elemDetails -> parseDetails(elemDetails.$(By.tagName("summary")), elemDetails.$$(By.tagName("a"))))
                 .filter(info -> !info.getCompanyEmails().isEmpty())
-                .forEach(f -> System.out.println(f.toString() + i.getAndIncrement()));
+                .forEach(f -> System.out.println(f.toString()));
     }
 
     private CompanyDetails parseDetails(SelenideElement summary, ElementsCollection aHrefList) {
