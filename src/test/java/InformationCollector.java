@@ -30,7 +30,6 @@ public class InformationCollector {
     @org.testng.annotations.Test
     public void parseDetailsByUrlTest() {
         Selenide.open("https://www.gov.pl/web/poland-businessharbour-ru/itspecialist");
-        AtomicInteger i = new AtomicInteger();
         Selenide.$$x("//div[2]//details").stream()
                 .map(elemDetails -> parseDetails(elemDetails.$(By.tagName("summary")), elemDetails.$$(By.tagName("a"))))
                 .filter(info -> !info.getCompanyEmails().isEmpty())
