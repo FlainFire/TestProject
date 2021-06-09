@@ -1,3 +1,5 @@
+package com.github.invilius.model;
+
 import java.util.List;
 
 public class CompanyDetails {
@@ -10,17 +12,19 @@ public class CompanyDetails {
         this.companyEmails = companyEmails;
     }
 
-    @Override
-    public String toString() {
-        return "CompanyDetails{" +
-                "contactName='" + companyName + '\'' +
-                ", contactEmails=" + companyEmails +
-                '}';
+    public String getCompanyName() {
+        return companyName;
     }
 
     public List<String> getCompanyEmails() {
         return companyEmails;
     }
 
-
+    @Override
+    public String toString() {
+        return "com.github.invilius.model.CompanyDetails{" +
+                "contactName='" + companyName + '\'' +
+                ", contactEmails=" + companyEmails +
+                '}';
+    }
 }

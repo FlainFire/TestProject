@@ -1,39 +1,43 @@
+package com.github.invilius.service;
+
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.github.invilius.model.CompanyDetails;
 import org.openqa.selenium.By;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
-@SuppressWarnings("deprecation")
-public class InformationCollector {
+public class InformationCollector implements AutoCloseable {
 
-    @BeforeClass(alwaysRun = true)
-    public void setUp() {
+    public InformationCollector() {
         Configuration.browser = "chrome";
     }
 
-    public static void main(String[] args) {
-        InformationCollector ic = new InformationCollector();
-        CompanyDetails cd = new CompanyDetails(null, null);
-        ic.parseDetailsByUrlTest();
+    public List<CompanyDetails> getTestData() {
+        List<CompanyDetails> testData = new ArrayList<>();
+
+        testData.add(new CompanyDetails("AAkavity", Arrays.asList("alex.okovity@gmail.com")));
+        testData.add(new CompanyDetails("AAkavity BIG Company", Arrays.asList("alex.okovity@gmail.com", "alexandr_okovity@mail.ru")));
+
+        return testData;
     }
 
-    @org.testng.annotations.Test
-    public void parseDetailsByUrlTest() {
+    public List<CompanyDetails> parsePbhCompaniesDetails() {
         Selenide.open("https://www.gov.pl/web/poland-businessharbour-ru/itspecialist");
-        Selenide.$$x("//div[2]//details").stream()
+
+        return Selenide.$$x("//div[2]//details").stream()
                 .map(elemDetails -> parseDetails(elemDetails.$(By.tagName("summary")), elemDetails.$$(By.tagName("a"))))
                 .filter(info -> !info.getCompanyEmails().isEmpty())
-                .forEach(f -> System.out.println(f.toString()));
+                .collect(Collectors.toList());
     }
 
     private CompanyDetails parseDetails(SelenideElement summary, ElementsCollection aHrefList) {
@@ -58,16 +62,12 @@ public class InformationCollector {
         return null;
     }
 
-
-    @AfterMethod
-    public void tearDown() {
+    @Override
+    public void close() {
         try {
             Selenide.closeWebDriver();
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-
     }
-
 }
-
